@@ -3,7 +3,7 @@ default: all
 MODULES := ldiskfs
 
 # copy makefile over to not break patches
-backfs_extra := $(wildcard @LINUX@/fs/@BACKFS@/Makefile)
+backfs_extra := $(wildcard @LINUX_OBJ@/fs/@BACKFS@/Makefile)
 
 backfs_headers := $(wildcard @LINUX@/fs/@BACKFS@/*.h)
 linux_headers := $(wildcard @LINUX@/include/linux/@BACKFS@*.h)

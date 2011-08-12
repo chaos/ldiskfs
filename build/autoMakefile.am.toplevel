@@ -184,3 +184,14 @@ debs:
 	VER=$$(sed -ne '1s/^lustre (\(.*-[0-9][0-9]*\)).*$$/\1/p' debian/changelog); \
 	mkdir -p debs && \
 	mv ../liblustre_$${VER}_*.deb ../linux-patch-lustre_$${VER}_all.deb ../lustre-dev_$${VER}_*.deb ../lustre-source_$${VER}_all.deb ../lustre-tests_$${VER}_*.deb ../lustre-utils_$${VER}_*.deb ../lustre_$${VER}.dsc ../lustre_$${VER}_*.changes ../lustre_$${VER%-[0-9]*}.orig.tar.gz ../lustre_$${VER}.diff.gz ../lustre-client-modules-$${KVERS}_$${VER}_*.deb debs/
+
+noinst_HEADERS  = $(top_srcdir)/ldiskfs/linux-stage/include/linux/dynlocks.h
+noinst_HEADERS += $(top_srcdir)/ldiskfs/linux-stage/fs/ext4/*.h
+
+install-data-local:
+	destname=lustre-ldiskfs-$(VERSION)/$(LINUXRELEASE); \
+	instdest=$(DESTDIR)/usr/src/$$destname; \
+	for instfile in $(noinst_HEADERS) $(SYMVERFILE); do \
+		$(INSTALL) -D $$instfile $$instdest/$$instfile; \
+	done; \
+	echo "$(VERSION)" >$$instdest/ldiskfs.release;
