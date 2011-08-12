@@ -20,6 +20,7 @@ if test $linux25 = "yes" ; then
 	makerule="$PWD/build"
 	AC_MSG_CHECKING([for external module build support])
 	rm -f build/conftest.i
+	EXTRA_KCFLAGS="-I$LINUX_OBJ/arch/x86/include $EXTRA_KCFLAGS"
 	LB_LINUX_TRY_MAKE([],[],
 		[$makerule LUSTRE_KERNEL_TEST=conftest.i],
 		[test -s build/conftest.i],
@@ -613,7 +614,7 @@ LB_LINUX_TRY_MAKE([
 #
 AC_DEFUN([LB_PROG_LINUX],
 [LB_LINUX_PATH
-LB_LINUX_ARCH
+#LB_LINUX_ARCH
 LB_LINUX_SYMVERFILE
 
 
