@@ -58,12 +58,7 @@ AM_CONDITIONAL(LINUX25, true)
 LDISKFSDIR="$PWD/ldiskfs"
 AC_SUBST(LDISKFSDIR)
 
-AC_MSG_CHECKING([whether to enable quilt for making ldiskfs])
-AC_ARG_ENABLE([quilt],
-	      AC_HELP_STRING([--disable-quilt],
-			     [disable use of quilt for ldiskfs]),[],
-			     [enable_quilt='yes'])
-AC_MSG_RESULT([$enable_quilt])
+LDISKFS_AC_QUILT
 
 AC_PATH_PROG(PATCH, patch, [no])
 

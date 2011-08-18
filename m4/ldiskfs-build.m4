@@ -37,3 +37,16 @@ AC_DEFUN([LDISKFS_AC_CONFIG_HEADERS], [
 
 	AC_SUBST(EXTRA_KCFLAGS)
 ])
+
+AC_DEFUN([LDISKFS_AC_QUILT], [
+	AC_MSG_CHECKING([whether to enable quilt for making ldiskfs])
+
+	AC_ARG_ENABLE([quilt],
+		[AC_HELP_STRING([--disable-quilt],
+			[disable use of quilt for ldiskfs])],
+		[],
+		[enable_quilt='yes']
+	)
+
+	AC_MSG_RESULT([$enable_quilt])
+])
