@@ -1,4 +1,6 @@
 AC_DEFUN([LDISKFS_AC_DIST], [
+	AC_MSG_CHECKING([whether to only configure enough for make dist])
+
 	AC_ARG_ENABLE([dist],
 		[AC_HELP_STRING([--enable-dist],
 			[only configure enough for make dist])],
