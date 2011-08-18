@@ -1,14 +1,21 @@
 # Process this file with autoconf to produce a configure script.
 
-AC_INIT([Lustre ldiskfs], 3.3.0, [http://bugs.whamcloud.com/])
-AC_CONFIG_SRCDIR([lustre-ldiskfs.spec.in])
-ldiskfs_is_ext4=yes
+AC_INIT([lustre-ldiskfs], [3.3.0], [http://bugs.whamclound.com/])
 
-# Don't look for install-sh, etc. in ..
-AC_CONFIG_AUX_DIR([.])
+dnl #
+dnl # TODO: What is the point of this? Is it needed?
+dnl #
+dnl # AC_CONFIG_SRCDIR([lustre-ldiskfs.spec.in])
+dnl # ldiskfs_is_ext4=yes
+dnl #
 
+AC_LANG(C)
+AC_CONFIG_AUX_DIR([.]) # Don't look for install-sh, etc. in ..
 AC_CANONICAL_SYSTEM
 
+dnl #
+dnl # TODO: Do we really need to specify these options?
+dnl #
 AM_INIT_AUTOMAKE([1.9 tar-ustar])
 
 AC_PROG_CC
