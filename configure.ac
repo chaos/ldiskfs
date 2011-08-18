@@ -32,6 +32,9 @@ LB_PROG_CC
 LDISKFS_AC_DIST
 LDISKFS_AC_MODULES
 
+dnl #
+dnl # TODO: Why is this here?
+dnl #
 if test x$enable_modules = xyes ; then
 	LB_PROG_LINUX
 if test x$linux25 = xyes ; then
@@ -39,8 +42,13 @@ if test x$linux25 = xyes ; then
 fi
 fi
 
-LB_CONFIG_HEADERS
+LDISKFS_AC_CONFIG_HEADERS
 
+dnl #
+dnl # TODO: What is the purpose of these? There are dependant rules in
+dnl #       the build/autoMakefile.am.toplevel file, but I'm unsure what
+dnl #       their purpose is.
+dnl #
 # These allow Lustre Makefiles and autoMakefiles to be used unchanged.
 AM_CONDITIONAL(MODULES, true)
 AM_CONDITIONAL(LINUX, true)
