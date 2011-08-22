@@ -48,20 +48,7 @@ AM_CONDITIONAL(LINUX25, true)
 
 LDISKFS_AC_LDISKFSDIR
 LDISKFS_AC_QUILT
-
-AC_PATH_PROG(PATCH, patch, [no])
-
-if test x$enable_quilt = xno ; then
-    QUILT="no"
-else
-    AC_PATH_PROG(QUILT, quilt, [no])
-fi
-
-if test x$enable_ldiskfs$PATCH$QUILT = xyesnono ; then
-	AC_MSG_ERROR([Quilt or patch are needed to build the ldiskfs module])
-fi
-
-AM_CONDITIONAL(USE_QUILT, test x$QUILT != xno)
+LDISKFS_AC_PATH_PROGS
 
 LB_DEFINE_LDISKFS_OPTIONS
 
