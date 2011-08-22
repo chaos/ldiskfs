@@ -74,3 +74,26 @@ AC_DEFUN([LDISKFS_AC_PATH_PROGS], [
 
 	AM_CONDITIONAL([USE_QUILT], [test x$QUILT != xno])
 ])
+
+AC_DEFUN([LDISKFS_AC_DEFINE_OPTIONS], [
+	AC_DEFINE([CONFIG_LDISKFS_FS_MODULE], [1],
+		[build ldiskfs as a module])
+
+	AC_DEFINE([CONFIG_LDISKFS_FS_XATTR], [1],
+		[enable extended attributes for ldiskfs])
+
+	AC_DEFINE([CONFIG_LDISKFS_FS_POSIX_ACL], [1],
+		[enable posix acls for ldiskfs])
+
+	AC_DEFINE([CONFIG_LDISKFS_FS_SECURITY], [1],
+		[enable fs security for ldiskfs])
+
+	AC_DEFINE([CONFIG_LDISKFSDEV_FS_POSIX_ACL], [1],
+		[enable posix acls for ldiskfs])
+
+	AC_DEFINE([CONFIG_LDISKFSDEV_FS_XATTR], [1],
+		[enable extented attributes for ldiskfs])
+
+	AC_DEFINE([CONFIG_LDISKFSDEV_FS_SECURITY], [1],
+		[enable fs security for ldiskfs])
+])
