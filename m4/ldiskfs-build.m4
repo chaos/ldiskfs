@@ -62,3 +62,15 @@ AC_DEFUN([LDISKFS_AC_INCLUDE_RULES], [
 	INCLUDE_RULES="include $PWD/Rules"
 	AC_SUBST(INCLUDE_RULES)
 ])
+
+AC_DEFUN([LDISKFS_AC_PATH_PROGS], [
+	AC_PATH_PROG([PATCH], [patch], [no])
+	AC_PATH_PROG([QUILT], [quilt], [no])
+
+	AS_IF([test x$enable_ldiskfs$PATCH$QUILT = xyesnono], [
+		AC_MSG_ERROR([
+		*** Quilt or patch are needed to build the ldiskfs module])
+	])
+
+	AM_CONDITIONAL([USE_QUILT], [test x$QUILT != xno])
+])
