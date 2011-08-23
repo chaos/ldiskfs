@@ -21,6 +21,15 @@ AM_INIT_AUTOMAKE([1.9 tar-ustar])
 AC_PROG_CC
 LDISKFS_AC_INCLUDE_RULES
 LDISKFS_AC_DIST
+LDISKFS_AC_KERNEL
+
+dnl #
+dnl # TODO: When the build system restructuring is completed, this
+dnl #       compatibility macro should be unnecessary and should be
+dnl #       removed. This is needed to temporarily provide some of
+dnl #       the functionality that the LB_LINUX_PATH macro provided.
+dnl #
+LDISKFS_AC_COMPAT_LB_LINUX_PATH
 
 dnl #
 dnl # TODO: Why is this here?
