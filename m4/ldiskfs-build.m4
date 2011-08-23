@@ -185,8 +185,28 @@ AC_DEFUN([LDISKFS_AC_LINUX_VERSION], [
 	AC_SUBST(LINUX_VERSION)
 ])
 
+AC_DEFUN([LDISKFS_AC_LINUX_CONFIG], [
+	AC_ARG_WITH([linux-config],
+		[AC_HELP_STRING([--with-linux-config=PATH],
+			[Path to kernel kernel .config file])],
+		[kernelconfig="${withval}"],
+		[kernelconfig="${LINUX_OBJ}/.config"])
+
+	AC_MSG_CHECKING([kernel .config file])
+
+	AS_IF([test ! -e ${kernelconfig}], [
+		AC_MSG_ERROR([*** kernel .config file could not be found.])
+	])
+
+	AC_MSG_RESULT([${kernelconfig}])
+
+	LINUX_CONFIG=${kernelconfig}
+	AC_SUBST(LINUX_CONFIG)
+])
+
 AC_DEFUN([LDISKFS_AC_KERNEL], [
 	LDISKFS_AC_LINUX
 	LDISKFS_AC_LINUX_OBJ
 	LDISKFS_AC_LINUX_VERSION
+	LDISKFS_AC_LINUX_CONFIG
 ])
