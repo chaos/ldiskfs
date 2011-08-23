@@ -21,16 +21,13 @@ AM_INIT_AUTOMAKE([1.9 tar-ustar])
 AC_PROG_CC
 LDISKFS_AC_INCLUDE_RULES
 LDISKFS_AC_DIST
-LDISKFS_AC_MODULES
 
 dnl #
 dnl # TODO: Why is this here?
 dnl #
-if test x$enable_modules = xyes ; then
-	LB_PROG_LINUX
+LB_PROG_LINUX
 if test x$linux25 = xyes ; then
 	LB_LINUX_MODPOST
-fi
 fi
 
 LDISKFS_AC_CONFIG_HEADERS
