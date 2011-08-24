@@ -381,3 +381,48 @@ AC_DEFUN([LDISKFS_AC_DIST_LDISKFS_SERIES], [
 		LDISKFS_AC_LDISKFS_SERIES
 	])
 ])
+
+AC_DEFUN([LDISKFS_AC_LINUX_SYMBOL_EXPORT], [
+	AC_MSG_CHECKING([whether Linux was build with symbol $1 exported])
+
+	grep -q -E '[[[:space:]]]$1[[[:space:]]]' \
+		${LINUX_OBJ}/${LINUX_SYMBOLS} 2>/dev/null
+	rc=$?
+	AS_IF([test ${rc} -ne 0], [
+		export=0
+		for file in $2; do
+			grep -q -E "EXPORT_SYMBOL.*\($1\)" \
+				"${LINUX}/${file}" 2>/dev/null
+			rc=$?
+			AS_IF([test ${rc} -eq 0], [
+				export=1
+				break
+			])
+		done
+
+		AS_IF([test ${export} -eq 0], [
+			AC_MSG_RESULT([no])
+			$4
+		], [
+			AC_MSG_RESULT([yes])
+			$3
+		])
+	], [
+		AC_MSG_RESULT([yes])
+		$3
+	])
+])
+
+AC_DEFUN([LDISKFS_AC_CHECK_SYMBOL_EXPORTS], [
+	LDISKFS_AC_LINUX_SYMBOL_EXPORT([d_rehash_cond],
+		[fs/dcache.c], [AC_DEFINE(HAVE_D_REHASH_COND, 1,
+			[d_rehash_cond is exported by the kernel])],
+		[]
+	)
+
+	LDISKFS_AC_LINUX_SYMBOL_EXPORT([__d_rehash],
+		[fs/dcache.c], [AC_DEFINE(HAVE___D_REHASH, 1,
+			[__d_rehash is exported by the kernel])],
+		[]
+	)
+])
