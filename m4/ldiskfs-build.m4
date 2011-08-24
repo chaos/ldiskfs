@@ -204,9 +204,38 @@ AC_DEFUN([LDISKFS_AC_LINUX_CONFIG], [
 	AC_SUBST(LINUX_CONFIG)
 ])
 
+AC_DEFUN([LDISKFS_AC_LINUX_SYMBOLS], [
+	AC_MSG_CHECKING([kernel file name for module symbols])
+
+	modpost=${LINUX}/scripts/Makefile.modpost
+	AS_IF([test -f "${modpost}"], [
+		AS_IF([grep -q Modules.symvers ${modpost}], [
+			LINUX_SYMBOLS=Modules.symvers
+		], [
+			LINUX_SYMBOLS=Module.symvers
+		])
+
+		AS_IF([test ! -f "${LINUX_OBJ}/${LINUX_SYMBOLS}"], [
+			AC_MSG_ERROR([
+	*** Please make sure the kernel devel package for your distribution
+	*** is installed.  If your building with a custom kernel make sure the
+	*** kernel is configured, built, and the '--with-linux=PATH' configure
+	*** option refers to the location of the kernel source.])
+		])
+
+	], [
+		LINUX_SYMBOLS=NONE
+	])
+
+	AC_MSG_RESULT(${LINUX_SYMBOLS})
+	AC_SUBST(LINUX_SYMBOLS)
+])
+
+
 AC_DEFUN([LDISKFS_AC_KERNEL], [
 	LDISKFS_AC_LINUX
 	LDISKFS_AC_LINUX_OBJ
 	LDISKFS_AC_LINUX_VERSION
 	LDISKFS_AC_LINUX_CONFIG
+	LDISKFS_AC_LINUX_SYMBOLS
 ])
