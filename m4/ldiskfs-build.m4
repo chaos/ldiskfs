@@ -231,6 +231,64 @@ AC_DEFUN([LDISKFS_AC_LINUX_SYMBOLS], [
 	AC_SUBST(LINUX_SYMBOLS)
 ])
 
+AC_DEFUN([LDISKFS_AC_LINUX_COMPILE_IFELSE], [
+	m4_ifvaln([$1], [AC_LANG_CONFTEST([$1])])
+	rm -Rf ldiskfs-build && mkdir -p ldiskfs-build
+	echo "obj-m := conftest.o" >ldiskfs-build/Makefile
+	AS_IF(
+		[AC_TRY_COMMAND(cp conftest.c ldiskfs-build && make [$2] -C $LINUX_OBJ EXTRA_CFLAGS="-Werror-implicit-function-declaration $EXTRA_KCFLAGS" M=$PWD/ldiskfs-build) >/dev/null && AC_TRY_COMMAND([$3])],
+		[$4],
+		[_AC_MSG_LOG_CONFTEST m4_ifvaln([$5],[$5])]
+	)
+	rm -Rf ldiskfs-build
+])
+
+m4_define([LDISKFS_AC_LANG_PROGRAM], [
+$1
+int
+main (void)
+{
+dnl Do *not* indent the following line: there may be CPP directives.
+dnl Don't move the `;' right after for the same reason.
+$2
+  ;
+  return 0;
+}
+])
+
+AC_DEFUN([LDISKFS_AC_LINUX_TRY_COMPILE],
+	[LDISKFS_AC_LINUX_COMPILE_IFELSE(
+	[AC_LANG_SOURCE([LDISKFS_AC_LANG_PROGRAM([[$1]], [[$2]])])],
+	[modules],
+	[test -s ldiskfs-build/conftest.o],
+	[$3], [$4])
+])
+
+AC_DEFUN([LDISKFS_AC_LINUX_CONFIG_OPTION],
+	[AC_MSG_CHECKING([whether Linux was built with CONFIG_$1])
+
+	LDISKFS_AC_LINUX_TRY_COMPILE([
+		#include <linux/module.h>
+	],[
+		#ifndef CONFIG_$1
+		#error CONFIG_$1 not #defined
+		#endif
+	],[
+		AC_MSG_RESULT([yes])
+		$2
+	],[
+		AC_MSG_RESULT([no])
+		$3
+	])
+])
+
+AC_DEFUN([LDISKFS_AC_LINUX_CONFIGURATION], [
+	LDISKFS_AC_LINUX_CONFIG_OPTION([MODULES], [], [
+		AC_MSG_ERROR([
+	*** Kernel not built with CONFIG_MODULES which is required to
+	*** build ldiskfs kernel modules.])
+	])
+])
 
 AC_DEFUN([LDISKFS_AC_KERNEL], [
 	LDISKFS_AC_LINUX
@@ -238,4 +296,5 @@ AC_DEFUN([LDISKFS_AC_KERNEL], [
 	LDISKFS_AC_LINUX_VERSION
 	LDISKFS_AC_LINUX_CONFIG
 	LDISKFS_AC_LINUX_SYMBOLS
+	LDISKFS_AC_LINUX_CONFIGURATION
 ])
