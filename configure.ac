@@ -61,7 +61,10 @@ LDISKFS_AC_COMPAT_LB_HAVE_EXT4_ENABLED
 
 LDISKFS_AC_DIST_LDISKFS_SERIES
 
-AC_SUBST(ac_configure_args)
+dnl #
+dnl # TODO: Why is this here?
+dnl #
+#AC_SUBST(ac_configure_args)
 
 LDISKFS_AC_CHECK_SYMBOL_EXPORTS
 
