@@ -34,9 +34,9 @@ LDISKFS_AC_COMPAT_LB_LINUX_PATH
 dnl #
 dnl # TODO: Why is this here?
 dnl #
-if test x$linux25 = xyes ; then
-	LB_LINUX_MODPOST
-fi
+#if test x$linux25 = xyes ; then
+#	LB_LINUX_MODPOST
+#fi
 
 LDISKFS_AC_CONFIG_HEADERS
 
