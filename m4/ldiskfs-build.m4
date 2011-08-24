@@ -298,3 +298,27 @@ AC_DEFUN([LDISKFS_AC_KERNEL], [
 	LDISKFS_AC_LINUX_SYMBOLS
 	LDISKFS_AC_LINUX_CONFIGURATION
 ])
+
+AC_DEFUN([LDISKFS_AC_ENABLE_EXT4], [
+	AC_MSG_CHECKING([whether to build ldiskfs based on ext4])
+
+	AC_ARG_ENABLE([ext4],
+		[AC_HELP_STRING([--enable-ext4],
+			[enable building ldiskfs based on ext4])],
+		[],
+		[enable_ext4=yes]
+	)
+
+	AC_MSG_RESULT([${enable_ext4}])
+
+	BACKFS=""
+	AS_IF([test x${enable_ext4} = xyes], [
+		AC_DEFINE(HAVE_EXT4_LDISKFS, 1, [build ldiskfs based on ext4])
+		BACKFS="ext4"
+	], [
+		BACKFS="ext3"
+	])
+	AC_SUBST(BACKFS)
+
+	AM_CONDITIONAL([USE_EXT4], [test x$enable_ext4 = xyes])
+])

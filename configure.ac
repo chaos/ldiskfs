@@ -56,20 +56,8 @@ LDISKFS_AC_QUILT
 LDISKFS_AC_PATH_PROGS
 LDISKFS_AC_DEFINE_OPTIONS
 
-LB_HAVE_EXT4_ENABLED
-
-if test x$enable_ext4 = xyes ; then
-	AC_DEFINE(HAVE_EXT4_LDISKFS, 1, [ldiskfs based on ext4])
-	BACKFS=ext4
-else
-	BACKFS=ext3
-fi
-
-AC_SUBST(BACKFS)
-BACKFSU=${BACKFS/ext/EXT}
-AC_SUBST(BACKFSU) # We need a Upper string
-
-AM_CONDITIONAL(USE_EXT4, test x$enable_ext4 = xyes)
+LDISKFS_AC_ENABLE_EXT4
+LDISKFS_AC_COMPAT_LB_HAVE_EXT4_ENABLED
 
 if test x$enable_dist != xyes; then
 	# don't need to do this if only configuring for make dist
