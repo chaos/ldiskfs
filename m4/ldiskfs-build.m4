@@ -322,3 +322,62 @@ AC_DEFUN([LDISKFS_AC_ENABLE_EXT4], [
 
 	AM_CONDITIONAL([USE_EXT4], [test x$enable_ext4 = xyes])
 ])
+
+AC_DEFUN([LDISKFS_AC_RHEL_KERNEL], [
+	AC_MSG_CHECKING([whether the kernel is a RedHat kernel])
+
+	LDISKFS_AC_LINUX_TRY_COMPILE([
+		#include <linux/version.h>
+	], [
+		#ifndef RHEL_RELEASE_CODE
+		#error "not redhat kernel"
+		#endif
+	], [
+		AC_MSG_RESULT([yes])
+		RHEL_KERNEL="yes"
+	], [
+		AC_MSG_RESULT([no])
+	])
+])
+
+AC_DEFUN([LDISKFS_AC_LDISKFS_SERIES], [
+	LDISKFS_AC_RHEL_KERNEL
+
+	AC_MSG_CHECKING([which ldiskfs series to use])
+
+	LDISKFS_SERIES=""
+	AS_CASE([${LINUX_VERSION}],
+		[2.6.5*],     [LDISKFS_SERIES="2.6-suse.series"],
+		[2.6.9*],     [LDISKFS_SERIES="2.6-rhel4.series"],
+		[2.6.10-ac*], [LDISKFS_SERIES="2.6-fc3.series"],
+		[2.6.10*],    [LDISKFS_SERIES="2.6-rhel4.series"],
+		[2.6.12*],    [LDISKFS_SERIES="2.6.12-vanilla.series"],
+		[2.6.15*],    [LDISKFS_SERIES="2.6-fc5.series"],
+		[2.6.16*],    [LDISKFS_SERIES="2.6-sles10.series"],
+		[2.6.18*],    [
+			AS_IF([test x${RHEL_KERNEL} = xyes], [
+				AS_IF([test x${enable_ext4} = xyes], [
+					LDISKFS_SERIES="2.6-rhel5-ext4.series"
+				], [
+					LDISKFS_SERIES="2.6-rhel5.series"
+				])
+			], [
+				LDISKFS_SERIES="2.6.18-vanilla.series"
+			])
+		],
+		[2.6.22*],    [LDISKFS_SERIES="2.6.22-vanilla.series"],
+		[2.6.27*],    [LDISKFS_SERIES="2.6.22-sles11.series"],
+		[2.6.32*],    [LDISKFS_SERIES="2.6-rhel6.series"],
+		[AC_MSG_ERROR([*** Unknown kernel version ${LINUX_VERSION}])]
+	)
+
+	AC_MSG_RESULT([${LDISKFS_SERIES}])
+
+	AC_SUBST(LDISKFS_SERIES)
+])
+
+AC_DEFUN([LDISKFS_AC_DIST_LDISKFS_SERIES], [
+	AS_IF([test x$enable_dist != xyes], [
+		LDISKFS_AC_LDISKFS_SERIES
+	])
+])

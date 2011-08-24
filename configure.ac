@@ -59,36 +59,7 @@ LDISKFS_AC_DEFINE_OPTIONS
 LDISKFS_AC_ENABLE_EXT4
 LDISKFS_AC_COMPAT_LB_HAVE_EXT4_ENABLED
 
-if test x$enable_dist != xyes; then
-	# don't need to do this if only configuring for make dist
-AC_MSG_CHECKING([which ldiskfs series to use])
-case $LINUXRELEASE in
-2.6.5*) LDISKFS_SERIES="2.6-suse.series" ;;
-2.6.9*) LDISKFS_SERIES="2.6-rhel4.series" ;;
-2.6.10-ac*) LDISKFS_SERIES="2.6-fc3.series" ;;
-2.6.10*) LDISKFS_SERIES="2.6-rhel4.series" ;;
-2.6.12*) LDISKFS_SERIES="2.6.12-vanilla.series" ;;
-2.6.15*) LDISKFS_SERIES="2.6-fc5.series";;
-2.6.16*) LDISKFS_SERIES="2.6-sles10.series";;
-2.6.18*)
-	if test x$RHEL_KENEL = xyes; then
-                if test x$enable_ext4 = xyes; then
-		        LDISKFS_SERIES="2.6-rhel5-ext4.series"
-                else
-		        LDISKFS_SERIES="2.6-rhel5.series"
-                fi
-	else
-		LDISKFS_SERIES="2.6.18-vanilla.series"
-	fi
-	;;
-2.6.22*) LDISKFS_SERIES="2.6.22-vanilla.series";;
-2.6.27*) LDISKFS_SERIES="2.6-sles11.series";;
-2.6.32*) LDISKFS_SERIES="2.6-rhel6.series";;
-*) AC_MSG_WARN([Unknown kernel version $LINUXRELEASE, fix ldiskfs/configure.ac])
-esac
-AC_MSG_RESULT([$LDISKFS_SERIES])
-fi
-AC_SUBST(LDISKFS_SERIES)
+LDISKFS_AC_DIST_LDISKFS_SERIES
 
 AC_SUBST(ac_configure_args)
 
