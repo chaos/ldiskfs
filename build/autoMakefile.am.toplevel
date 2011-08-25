@@ -47,7 +47,6 @@ doxygen:  doxygen-api doxygen-ref
 doxygen-%: build/doxyfile.%
 	   doxygen $<
 
-if MODULES
 sources: all-sources
 
 all-sources: $(EXTRA_SOURCES)
@@ -55,21 +54,7 @@ all-sources: $(EXTRA_SOURCES)
 		$(MAKE) sources -C $$dir || exit $$? ; \
 	done
 
-if LINUX
 all-am: modules
-
-if !LINUX25
-DEP = dep
-dep: .depend
-
-.depend: all-sources
-	$(MAKE) CC="$(CC)" -C $(LINUX_OBJ)			     \
-	-f $(PWD)/build/Makefile LUSTRE_LINUX_CONFIG=$(LINUX_CONFIG) \
-	-o scripts -o include/config/MARKER _sfdep_$(PWD)	     \
-	_FASTDEP_ALL_SUB_DIRS="$(PWD)"
-
-CLEANFILES = .depend
-endif # !LINUX25
 
 modules: $(DEP) all-sources
 	$(MAKE) CC="$(CC)" -C $(LINUX_OBJ)			     \
@@ -77,9 +62,7 @@ modules: $(DEP) all-sources
         LINUXINCLUDE='$(EXTRA_LNET_INCLUDE) -I$$(srctree)/arch/$$(SRCARCH)/include -Iinclude $$(if $$(KBUILD_SRC),-Iinclude2 -I$$(srctree)/include) -include include/linux/autoconf.h' \
 	$(MODULE_TARGET)=$(PWD) -o tmp_include_depends -o scripts -o \
 	include/config/MARKER $@
-endif # LINUX
 
-endif # MODULES
 
 dist-hook:
 	$(RM) $(distdir)/ldiskfs/*.spec
