@@ -426,3 +426,17 @@ AC_DEFUN([LDISKFS_AC_CHECK_SYMBOL_EXPORTS], [
 		[]
 	)
 ])
+
+AC_DEFUN([LDISKFS_AC_MOSTLYCLEANFILES], [
+	MOSTLYCLEANFILES='.*.cmd \
+	                  .*.flags \
+	                  *.o \
+	                  *.ko \
+	                  *.mod.c \
+	                  .depend \
+	                  .*.1.* \
+	                  Modules.symvers \
+	                  Module.symvers'
+
+	AC_SUBST(MOSTLYCLEANFILES)
+])
