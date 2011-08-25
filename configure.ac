@@ -39,18 +39,6 @@ dnl #
 #fi
 
 LDISKFS_AC_CONFIG_HEADERS
-
-dnl #
-dnl # TODO: What is the purpose of these? There are dependant rules in
-dnl #       the build/autoMakefile.am.toplevel file, but I'm unsure what
-dnl #       their purpose is.
-dnl #
-# These allow Lustre Makefiles and autoMakefiles to be used unchanged.
-AM_CONDITIONAL(MODULES, true)
-AM_CONDITIONAL(LINUX, true)
-AM_CONDITIONAL(DARWIN, true)
-AM_CONDITIONAL(LINUX25, true)
-
 LDISKFS_AC_LDISKFSDIR
 LDISKFS_AC_QUILT
 LDISKFS_AC_PATH_PROGS
