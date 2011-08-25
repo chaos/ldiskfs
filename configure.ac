@@ -12,13 +12,9 @@ dnl #
 AC_LANG(C)
 AC_CONFIG_AUX_DIR([.]) # Don't look for install-sh, etc. in ..
 AC_CANONICAL_SYSTEM
-
-dnl #
-dnl # TODO: Do we really need to specify these options?
-dnl #
-AM_INIT_AUTOMAKE([1.9 tar-ustar])
-
+AM_INIT_AUTOMAKE
 AC_PROG_CC
+
 LDISKFS_AC_INCLUDE_RULES
 LDISKFS_AC_DIST
 LDISKFS_AC_KERNEL
