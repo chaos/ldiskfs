@@ -68,8 +68,14 @@ dnl #
 
 LDISKFS_AC_CHECK_SYMBOL_EXPORTS
 
-LB_CONFIG_FILES
-AC_CONFIG_FILES([ldiskfs/autoMakefile ldiskfs/Makefile])
+AC_CONFIG_FILES([
+	Makefile
+	autoMakefile
+	Rules
+	ldiskfs/Makefile
+	ldiskfs/autoMakefile
+	lustre-ldiskfs.spec
+])
 
 MOSTLYCLEANFILES='.*.cmd .*.flags *.o *.ko *.mod.c .depend .*.1.* Modules.symvers Module.symvers'
 AC_SUBST(MOSTLYCLEANFILES)
