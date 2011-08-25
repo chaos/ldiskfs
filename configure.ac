@@ -1,16 +1,8 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_INIT([lustre-ldiskfs], [3.3.0], [http://bugs.whamclound.com/])
-
-dnl #
-dnl # TODO: What is the point of this? Is it needed?
-dnl #
-dnl # AC_CONFIG_SRCDIR([lustre-ldiskfs.spec.in])
-dnl # ldiskfs_is_ext4=yes
-dnl #
-
 AC_LANG(C)
-AC_CONFIG_AUX_DIR([.]) # Don't look for install-sh, etc. in ..
+AC_CONFIG_AUX_DIR([.]) dnl # Don't look for install-sh, etc. in ..
 AC_CANONICAL_SYSTEM
 AM_INIT_AUTOMAKE
 AC_PROG_CC
@@ -27,30 +19,22 @@ dnl #       the functionality that the LB_LINUX_PATH macro provided.
 dnl #
 LDISKFS_AC_COMPAT_LB_LINUX_PATH
 
-dnl #
-dnl # TODO: Why is this here?
-dnl #
-#if test x$linux25 = xyes ; then
-#	LB_LINUX_MODPOST
-#fi
-
 LDISKFS_AC_CONFIG_HEADERS
 LDISKFS_AC_LDISKFSDIR
 LDISKFS_AC_QUILT
 LDISKFS_AC_PATH_PROGS
 LDISKFS_AC_DEFINE_OPTIONS
-
 LDISKFS_AC_ENABLE_EXT4
+
+dnl #
+dnl # TODO: Just as the above compatibility macro, this should be
+dnl #       removed when the refactoring is complete.
+dnl #
 LDISKFS_AC_COMPAT_LB_HAVE_EXT4_ENABLED
 
 LDISKFS_AC_DIST_LDISKFS_SERIES
-
-dnl #
-dnl # TODO: Why is this here?
-dnl #
-#AC_SUBST(ac_configure_args)
-
 LDISKFS_AC_CHECK_SYMBOL_EXPORTS
+LDISKFS_AC_MOSTLYCLEANFILES
 
 AC_CONFIG_FILES([
 	Makefile
@@ -60,7 +44,5 @@ AC_CONFIG_FILES([
 	ldiskfs/autoMakefile
 	lustre-ldiskfs.spec
 ])
-
-LDISKFS_AC_MOSTLYCLEANFILES
 
 AC_OUTPUT
