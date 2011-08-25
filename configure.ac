@@ -77,7 +77,6 @@ AC_CONFIG_FILES([
 	lustre-ldiskfs.spec
 ])
 
-MOSTLYCLEANFILES='.*.cmd .*.flags *.o *.ko *.mod.c .depend .*.1.* Modules.symvers Module.symvers'
-AC_SUBST(MOSTLYCLEANFILES)
+LDISKFS_AC_MOSTLYCLEANFILES
 
 AC_OUTPUT
