@@ -1,0 +1,98 @@
+default: all
+all: sources
+
+backfs_extra := $(wildcard @LINUX_OBJ@/fs/@BACKFS@/Makefile)
+backfs_src   := $(wildcard @LINUX@/fs/@BACKFS@/*.c)
+backfs_hdr   := $(wildcard @LINUX@/fs/@BACKFS@/*.h)
+linux_hdr    := $(wildcard @LINUX@/include/linux/@BACKFS@*.h)
+trace_hdr    := $(wildcard @LINUX@/include/trace/events/@BACKFS@*.h)
+
+ext3_new_src := extents.c mballoc.c group.h dynlocks.c fiemap.h
+ext3_new_hdr := ext3_extents.h
+
+ext4_new_src := dynlocks.c fiemap.h mmp.c
+ext4_new_hdr :=
+
+new_src      := $(@BACKFS@_new_src)
+new_hdr      := $(@BACKFS@_new_hdr)
+
+series  := @abs_top_srcdir@/kernel_patches/series/ldiskfs-@LDISKFS_SERIES@
+patches := @abs_top_srcdir@/kernel_patches/patches
+
+sed_flags = \
+	-e "s/dx_hash_info/@BACKFS@_dx_hash_info/g" \
+	-e "s/dir_private_info/@BACKFS@_dir_private_info/g" \
+	-e "s/DX_HASH/@BACKFSU@_DX_HASH/g" \
+	-e "s/\<reserve_window/@BACKFS@_reserve_window/g" \
+	-e "s/\<rsv_window_add/@BACKFS@_rsv_window_add/g" \
+	-e "s/@BACKFSU@/LDISKFS/g" -e "s/@BACKFS@/ldiskfs/g"
+
+sources: $(backfs_src) $(backfs_hdr) $(linux_hdr) $(trace_hdr) $(series)
+
+	rm -rf linux-stage linux sources $(ldiskfs_SOURCES)
+
+	mkdir -p linux-stage/fs/@BACKFS@ \
+	         linux-stage/include/linux \
+	         linux-stage/include/trace/events
+
+	cp $(backfs_src) $(backfs_hdr) $(backfs_extra) \
+	   linux-stage/fs/@BACKFS@
+
+	if test -n "$(linux_hdr)"; then \
+		cp $(linux_hdr) linux-stage/include/linux; \
+	fi
+
+	if test -n "$(trace_hdr)"; then \
+		cp $(trace_hdr) linux-stage/include/trace/events; \
+	fi
+
+	@echo "Applying @BACKFS@ patches:"
+
+@USE_QUILT_TRUE@	ln -s $(patches) linux-stage/patches
+@USE_QUILT_TRUE@	ln -s $(series)  linux-stage/series
+@USE_QUILT_TRUE@	(cd linux-stage && quilt push -a -q) || exit 1
+
+@USE_QUILT_FALSE@	cd linux-stage || exit 1
+@USE_QUILT_FALSE@	for i in $$(< $(series)); do \
+@USE_QUILT_FALSE@		echo $$i; \
+@USE_QUILT_FALSE@		patch -s -p1 < $(patches)/$$i || exit 1; \
+@USE_QUILT_FALSE@	done
+
+	mkdir -p linux trace/events
+
+	@echo "Replacing '@BACKFS@' with 'ldiskfs':"
+
+	for i in $(notdir $(backfs_hdr) $(backfs_src)) $(new_src); do \
+		echo $$i; \
+		sed $(strip $(sed_flags)) \
+			linux-stage/fs/@BACKFS@/$$i > $$i; \
+	done
+
+	for i in $(subst @BACKFS@,,$(notdir $(backfs_hdr))); do \
+		old="@BACKFS@$$i"; \
+		new="ldiskfs$$i"; \
+		if test -f $$old; then \
+			echo $$old; \
+			mv $$old $$new; \
+		fi; \
+	done
+
+	for i in $(subst @BACKFS@,,$(notdir $(linux_hdr) $(new_hdr))); do \
+		old="@BACKFS@$$i"; \
+		new="ldiskfs$$i"; \
+		echo $$old; \
+		sed $(strip $(sed_flags)) \
+			linux-stage/include/linux/$$old > linux/$$new; \
+	done
+
+	for i in $(subst @BACKFS@,,$(notdir $(trace_hdr))); do \
+		old="@BACKFS@$$i"; \
+		new="ldiskfs$$i"; \
+		echo $$old; \
+		sed $(strip $(sed_flags)) \
+			linux-stage/include/trace/events/$$old \
+			> trace/events/$$new; \
+	done
+
+	sed $(strip $(sed_flags)) \
+		linux-stage/include/linux/dynlocks.h > linux/dynlocks.h
