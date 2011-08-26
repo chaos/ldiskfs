@@ -38,12 +38,6 @@ LDISKFS_AC_CHECK_SYMBOL_EXPORTS
 LDISKFS_AC_MOSTLYCLEANFILES
 
 AC_CONFIG_FILES([
-	Makefile
-	autoMakefile
-	Rules
-	ldiskfs/Makefile
-	ldiskfs/autoMakefile
-	lustre-ldiskfs.spec
 ])
 
 AC_OUTPUT
