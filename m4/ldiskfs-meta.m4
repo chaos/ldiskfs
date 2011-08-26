@@ -117,8 +117,18 @@ AC_DEFUN([LDISKFS_AC_META], [
 	fi
 
 	AC_MSG_RESULT([$_ldiskfs_ac_meta_got_file])
-	]
-)
+
+	AS_IF([test x$_ldiskfs_ac_meta_got_file = xyes], [
+		AC_MSG_CHECKING([name])
+		AC_MSG_RESULT([$LDISKFS_META_NAME])
+
+		AC_MSG_CHECKING([license(s)])
+		AC_MSG_RESULT([$LDISKFS_META_LICENSE])
+
+		AC_MSG_CHECKING([author(s)])
+		AC_MSG_RESULT([$LDISKFS_META_AUTHOR])
+	])
+])
 
 AC_DEFUN([_LDISKFS_AC_META_GETVAL],
 	[`perl -n\
