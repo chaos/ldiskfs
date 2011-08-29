@@ -1,6 +1,3 @@
-default: all
-all: sources
-
 backfs_extra := $(wildcard @LINUX_OBJ@/fs/@BACKFS@/Makefile)
 backfs_src   := $(wildcard @LINUX@/fs/@BACKFS@/*.c)
 backfs_hdr   := $(wildcard @LINUX@/fs/@BACKFS@/*.h)
@@ -16,8 +13,25 @@ ext4_new_hdr :=
 new_src      := $(@BACKFS@_new_src)
 new_hdr      := $(@BACKFS@_new_hdr)
 
+ldiskfs_src  := $(notdir $(backfs_src) $(backfs_hdr) $(new_src) $(new_hdr))
+ldiskfs_obj  := $(filter %.o,$(ldiskfs_src:.c=.o))
+
 series  := @abs_top_srcdir@/kernel_patches/series/ldiskfs-@LDISKFS_SERIES@
 patches := @abs_top_srcdir@/kernel_patches/patches
+
+###############################
+# Kernel Build Infrastructure #
+###############################
+
+EXTRA_CFLAGS += -I@LINUX@/fs -I@LDISKFSDIR@
+EXTRA_CFLAGS += -include @abs_top_builddir@/config.h
+
+obj-m := ldiskfs.o
+ldiskfs-objs := $(ldiskfs_obj)
+
+################################################
+# Patched ldiskfs Sources Build Infrastructure #
+################################################
 
 sed_flags = \
 	-e "s/dx_hash_info/@BACKFS@_dx_hash_info/g" \
