@@ -44,7 +44,7 @@ AC_DEFUN([LDISKFS_AC_PATH_PROGS], [
 	AC_PATH_PROG([PATCH], [patch], [no])
 	AC_PATH_PROG([QUILT], [quilt], [no])
 
-	AS_IF([test x$enable_ldiskfs$PATCH$QUILT = xyesnono], [
+	AS_IF([test x$PATCH$QUILT = xnono], [
 		AC_MSG_ERROR([
 		*** Quilt or patch are needed to build the ldiskfs module])
 	])
