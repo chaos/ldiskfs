@@ -24,6 +24,7 @@ LDISKFS_AC_RPM
 AC_CONFIG_FILES([
 	Makefile
 	ldiskfs/Makefile
+	lustre-ldiskfs.spec
 ])
 
 AC_OUTPUT
