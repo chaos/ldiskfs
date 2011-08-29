@@ -1,4 +1,5 @@
 all: modules
+distdir:
 
 backfs_extra := $(wildcard @LINUX_OBJ@/fs/@BACKFS@/Makefile)
 backfs_src   := $(wildcard @LINUX@/fs/@BACKFS@/*.c)
