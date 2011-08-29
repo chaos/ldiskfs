@@ -29,6 +29,9 @@ EXTRA_CFLAGS += -include @abs_top_builddir@/config.h
 obj-m := ldiskfs.o
 ldiskfs-objs := $(ldiskfs_obj)
 
+modules: sources
+	$(MAKE) -C @LINUX_OBJ@ M=$(shell pwd) $@
+
 ################################################
 # Patched ldiskfs Sources Build Infrastructure #
 ################################################
