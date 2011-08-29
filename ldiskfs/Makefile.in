@@ -66,8 +66,7 @@ sources: $(backfs_src) $(backfs_hdr) $(linux_hdr) $(trace_hdr) $(series)
 @USE_QUILT_TRUE@	ln -s $(series)  linux-stage/series
 @USE_QUILT_TRUE@	(cd linux-stage && quilt push -a -q) || exit 1
 
-@USE_QUILT_FALSE@	cd linux-stage || exit 1
-@USE_QUILT_FALSE@	for i in $$(< $(series)); do \
+@USE_QUILT_FALSE@	cd linux-stage && for i in $$(< $(series)); do \
 @USE_QUILT_FALSE@		echo $$i; \
 @USE_QUILT_FALSE@		patch -s -p1 < $(patches)/$$i || exit 1; \
 @USE_QUILT_FALSE@	done
