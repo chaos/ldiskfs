@@ -315,6 +315,11 @@ AC_DEFUN([LDISKFS_AC_ENABLE_EXT4], [
 	])
 	AC_SUBST(BACKFS)
 
+	dnl # The sed flags variable in ldiskfs/Makefile.in needs an
+	dnl # uppercase version of BACKFS.
+	BACKFSU=${BACKFS/ext/EXT}
+	AC_SUBST(BACKFSU)
+
 	AM_CONDITIONAL([USE_EXT4], [test x$enable_ext4 = xyes])
 ])
 
