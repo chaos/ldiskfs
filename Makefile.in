@@ -1,5 +1,0 @@
-modules:
-	$(MAKE) -C ldiskfs $@
-
-default: modules
-all: modules

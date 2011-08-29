@@ -1,3 +1,5 @@
+all: modules
+
 backfs_extra := $(wildcard @LINUX_OBJ@/fs/@BACKFS@/Makefile)
 backfs_src   := $(wildcard @LINUX@/fs/@BACKFS@/*.c)
 backfs_hdr   := $(wildcard @LINUX@/fs/@BACKFS@/*.h)
