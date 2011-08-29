@@ -1,0 +1,10 @@
+subdir-m += ldiskfs
+
+modules: sources
+	$(MAKE) -C @LINUX_OBJ@ M=$(shell pwd) $@
+
+sources:
+	$(MAKE) -C ldiskfs $@
+
+default: modules
+all: modules
