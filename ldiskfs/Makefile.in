@@ -1,4 +1,5 @@
 all: modules
+install: modules_install
 distdir:
 
 backfs_extra := $(wildcard @LINUX_OBJ@/fs/@BACKFS@/Makefile)
@@ -34,6 +35,21 @@ ldiskfs-objs := $(ldiskfs_obj)
 
 modules: sources
 	$(MAKE) -C @LINUX_OBJ@ M=$(shell pwd) $@
+
+modules_install:
+	@# Install the kernel modules
+	$(MAKE) -C @LINUX_OBJ@ M=$(shell pwd) \
+		INSTALL_MOD_PATH=$(DESTDIR) \
+		INSTALL_MOD_DIR=addon/ldiskfs $@
+	@# Remove extraneous build products when packaging
+	if [ -n "$(DESTDIR)" ]; then \
+		find $(DESTDIR)/lib/modules/@LINUX_VERSION@ \
+			-name 'modules.*' | xargs $(RM); \
+	fi
+	sysmap=$(DESTDIR)/boot/System.map-@LINUX_VERSION@; \
+	if [ -f $$sysmap ]; then \
+		depmod -ae -F $$sysmap @LINUX_VERSION@; \
+	fi
 
 ################################################
 # Patched ldiskfs Sources Build Infrastructure #
