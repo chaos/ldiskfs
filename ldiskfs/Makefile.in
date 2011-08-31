@@ -1,5 +1,5 @@
 all: modules
-install: modules_install
+install: modules_install install-data-local
 distdir:
 
 backfs_extra := $(wildcard @LINUX_OBJ@/fs/@BACKFS@/Makefile)
@@ -22,6 +22,14 @@ ldiskfs_obj  := $(filter %.o,$(ldiskfs_src:.c=.o))
 
 series  := @abs_top_srcdir@/kernel_patches/series/ldiskfs-@LDISKFS_SERIES@
 patches := @abs_top_srcdir@/kernel_patches/patches
+
+install-data-local: sources
+	destname=@LDISKFS_META_NAME@-@LDISKFS_META_VERSION@/@LINUX_VERSION@; \
+	instdest=$(DESTDIR)/usr/src/$$destname/ldiskfs; \
+	instfiles=$$(find . -name '*.h' | grep -v linux-stage); \
+	for instfile in $$instfiles; do \
+		/usr/bin/install -c -D $$instfile $$instdest/$$instfile; \
+	done
 
 ###############################
 # Kernel Build Infrastructure #
