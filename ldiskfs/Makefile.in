@@ -48,7 +48,7 @@ modules_install:
 	@# Install the kernel modules
 	$(MAKE) -C @LINUX_OBJ@ M=$(shell pwd) \
 		INSTALL_MOD_PATH=$(DESTDIR) \
-		INSTALL_MOD_DIR=addon/ldiskfs $@
+		INSTALL_MOD_DIR=fs/@LDISKFS_META_NAME@ $@
 	@# Remove extraneous build products when packaging
 	if [ -n "$(DESTDIR)" ]; then \
 		find $(DESTDIR)/lib/modules/@LINUX_VERSION@ \
