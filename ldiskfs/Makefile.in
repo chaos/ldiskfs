@@ -25,10 +25,14 @@ patches := @abs_top_srcdir@/kernel_patches/patches
 
 install-data-local: sources
 	destname=@LDISKFS_META_NAME@-@LDISKFS_META_VERSION@/@LINUX_VERSION@; \
-	instdest=$(DESTDIR)/usr/src/$$destname/ldiskfs; \
+	instdest=$(DESTDIR)/usr/src/$$destname; \
 	instfiles=$$(find . -name '*.h' | grep -v linux-stage); \
 	for instfile in $$instfiles; do \
-		/usr/bin/install -c -D $$instfile $$instdest/$$instfile; \
+		if [ "$$(dirname $$instfile)" = "." ]; then \
+			/usr/bin/install -c -D $$instfile $$instdest/ldiskfs/$$instfile; \
+		else \
+			/usr/bin/install -c -D $$instfile $$instdest/$$instfile; \
+		fi \
 	done
 
 ###############################
