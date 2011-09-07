@@ -294,6 +294,76 @@ AC_DEFUN([LDISKFS_AC_KERNEL], [
 	LDISKFS_AC_LINUX_CONFIGURATION
 ])
 
+AC_DEFUN([LDISKFS_AC_EXT4_SOURCES], [
+	AC_CHECK_FILES([
+		${LINUX}/fs/ext4/acl.h
+		${LINUX}/fs/ext4/ext4.h
+		${LINUX}/fs/ext4/ext4_extents.h
+		${LINUX}/fs/ext4/ext4_jbd2.h
+		${LINUX}/fs/ext4/mballoc.h
+		${LINUX}/fs/ext4/xattr.h
+
+		${LINUX}/fs/ext4/acl.c
+		${LINUX}/fs/ext4/balloc.c
+		${LINUX}/fs/ext4/bitmap.c
+		${LINUX}/fs/ext4/block_validity.c
+		${LINUX}/fs/ext4/dir.c
+		${LINUX}/fs/ext4/ext4.mod.c
+		${LINUX}/fs/ext4/ext4_jbd2.c
+		${LINUX}/fs/ext4/extents.c
+		${LINUX}/fs/ext4/file.c
+		${LINUX}/fs/ext4/fsync.c
+		${LINUX}/fs/ext4/hash.c
+		${LINUX}/fs/ext4/ialloc.c
+		${LINUX}/fs/ext4/inode.c
+		${LINUX}/fs/ext4/ioctl.c
+		${LINUX}/fs/ext4/mballoc.c
+		${LINUX}/fs/ext4/migrate.c
+		${LINUX}/fs/ext4/move_extent.c
+		${LINUX}/fs/ext4/namei.c
+		${LINUX}/fs/ext4/resize.c
+		${LINUX}/fs/ext4/super.c
+		${LINUX}/fs/ext4/symlink.c
+		${LINUX}/fs/ext4/xattr.c
+		${LINUX}/fs/ext4/xattr_security.c
+		${LINUX}/fs/ext4/xattr_trusted.c
+		${LINUX}/fs/ext4/xattr_user.c
+	], [], [
+		AC_MSG_ERROR([*** Complete Ext4 source tree not found])
+	])
+])
+
+AC_DEFUN([LDISKFS_AC_EXT3_SOURCES], [
+	AC_CHECK_FILES([
+		${LINUX}/fs/ext3/acl.h
+		${LINUX}/fs/ext3/namei.h
+		${LINUX}/fs/ext3/xattr.h
+
+		${LINUX}/fs/ext3/acl.c
+		${LINUX}/fs/ext3/balloc.c
+		${LINUX}/fs/ext3/bitmap.c
+		${LINUX}/fs/ext3/dir.c
+		${LINUX}/fs/ext3/ext3.mod.c
+		${LINUX}/fs/ext3/ext3_jbd.c
+		${LINUX}/fs/ext3/file.c
+		${LINUX}/fs/ext3/fsync.c
+		${LINUX}/fs/ext3/hash.c
+		${LINUX}/fs/ext3/ialloc.c
+		${LINUX}/fs/ext3/inode.c
+		${LINUX}/fs/ext3/ioctl.c
+		${LINUX}/fs/ext3/namei.c
+		${LINUX}/fs/ext3/resize.c
+		${LINUX}/fs/ext3/super.c
+		${LINUX}/fs/ext3/symlink.c
+		${LINUX}/fs/ext3/xattr.c
+		${LINUX}/fs/ext3/xattr_security.c
+		${LINUX}/fs/ext3/xattr_trusted.c
+		${LINUX}/fs/ext3/xattr_user.c
+	], [], [
+		AC_MSG_ERROR([*** Complete Ext3 source tree not found])
+	])
+])
+
 AC_DEFUN([LDISKFS_AC_ENABLE_EXT4], [
 	AC_MSG_CHECKING([whether to build ldiskfs based on ext4])
 
@@ -310,8 +380,10 @@ AC_DEFUN([LDISKFS_AC_ENABLE_EXT4], [
 	AS_IF([test x${enable_ext4} = xyes], [
 		AC_DEFINE(HAVE_EXT4_LDISKFS, 1, [build ldiskfs based on ext4])
 		BACKFS="ext4"
+		LDISKFS_AC_EXT4_SOURCES
 	], [
 		BACKFS="ext3"
+		LDISKFS_AC_EXT3_SOURCES
 	])
 	AC_SUBST(BACKFS)
 
