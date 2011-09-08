@@ -202,9 +202,10 @@ AC_DEFUN([LDISKFS_AC_LINUX_CONFIG], [
 AC_DEFUN([LDISKFS_AC_LINUX_SYMBOLS], [
 	AC_MSG_CHECKING([kernel file name for module symbols])
 
-	modpost=${LINUX}/scripts/Makefile.modpost
-	AS_IF([test -f "${modpost}"], [
-		AS_IF([grep -q Modules.symvers ${modpost}], [
+	modpost1=${LINUX}/scripts/Makefile.modpost
+	modpost2=${LINUX_OBJ}/scripts/Makefile.modpost
+	AS_IF([test -f "${modpost1}" || test -f "${modpost2}"], [
+		AS_IF([grep -qs Modules.symvers ${modpost1} ${modpost2}], [
 			LINUX_SYMBOLS=Modules.symvers
 		], [
 			LINUX_SYMBOLS=Module.symvers
