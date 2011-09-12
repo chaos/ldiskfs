@@ -84,7 +84,18 @@ AC_DEFUN([LDISKFS_AC_LINUX], [
 	AC_MSG_CHECKING([kernel source directory])
 
 	AS_IF([test -z "${kernelsrc}"], [
-		AS_IF([test -e "/lib/modules/$(uname -r)/source"], [
+		dnl # This first 'if' statement is needed because the
+		dnl # RHEL6 kernel-debuginfo-common package provides the
+		dnl # sources in the /usr/src/debug/*/linux-$(uname -r)
+		dnl # directory, but does not update the sources link to
+		dnl # point to that directory. IMHO, this fix is an ugly
+		dnl # hack to support RHEL6. The "right" solution would
+		dnl # be to get the package to set the sources symlink
+		dnl # to correctly point at the kernel source location.
+		AS_IF([test -n "$(ls -1d /usr/src/debug/*/linux-$(uname -r) 2>/dev/null)" ], [
+			sourcelink=$(ls -1d /usr/src/debug/*/linux-$(uname -r) \
+			             2>/dev/null | tail -1)
+		], [test -e "/lib/modules/$(uname -r)/source"], [
 			headersdir="/lib/modules/$(uname -r)/source"
 			sourcelink=$(readlink -f "$headersdir")
 		], [test -e "/lib/modules/$(uname -r)/build"], [
