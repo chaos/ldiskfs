@@ -171,7 +171,9 @@ AC_DEFUN([LDISKFS_AC_LINUX_VERSION], [
 		])
 	], [
 		AC_MSG_RESULT([Not found])
-		AC_MSG_ERROR([*** Cannot find UTS_RELEASE definition.])
+		AC_MSG_ERROR([
+	*** Cannot find UTS_RELEASE definition.
+	*** This is often provided by the kernel-devel package.])
 	])
 
 	AC_MSG_RESULT([${kernsrcver}])
