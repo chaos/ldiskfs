@@ -93,7 +93,11 @@
                             2>/dev/null) | tail -1)
  %endif
  %define kpkg            kernel
- %define kdevpkg         kernel-devel
+ %if %{defined el6} || %{defined ch5}
+  %define kdevpkg         kernel-devel,kernel-debuginfo-common-%{_target_cpu}
+ %else
+  %define kdevpkg         kernel-devel
+ %endif
  %if %{defined el6} || %{defined ch5}
   %define kverpkg        %(echo %{kver} | %{__sed} -e 's/.%{_target_cpu}//g')
  %else
