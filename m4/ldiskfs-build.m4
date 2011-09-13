@@ -311,7 +311,6 @@ AC_DEFUN([LDISKFS_AC_EXT4_SOURCES], [
 		${LINUX}/fs/ext4/bitmap.c
 		${LINUX}/fs/ext4/block_validity.c
 		${LINUX}/fs/ext4/dir.c
-		${LINUX}/fs/ext4/ext4.mod.c
 		${LINUX}/fs/ext4/ext4_jbd2.c
 		${LINUX}/fs/ext4/extents.c
 		${LINUX}/fs/ext4/file.c
@@ -346,7 +345,6 @@ AC_DEFUN([LDISKFS_AC_EXT3_SOURCES], [
 		${LINUX}/fs/ext3/balloc.c
 		${LINUX}/fs/ext3/bitmap.c
 		${LINUX}/fs/ext3/dir.c
-		${LINUX}/fs/ext3/ext3.mod.c
 		${LINUX}/fs/ext3/ext3_jbd.c
 		${LINUX}/fs/ext3/file.c
 		${LINUX}/fs/ext3/fsync.c
