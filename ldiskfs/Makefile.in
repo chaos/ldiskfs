@@ -2,11 +2,12 @@ all: modules
 install: modules_install install-data-local
 distdir:
 
-backfs_extra := $(wildcard @LINUX_OBJ@/fs/@BACKFS@/Makefile)
-backfs_src   := $(wildcard @LINUX@/fs/@BACKFS@/*.c)
-backfs_hdr   := $(wildcard @LINUX@/fs/@BACKFS@/*.h)
-linux_hdr    := $(wildcard @LINUX@/include/linux/@BACKFS@*.h)
-trace_hdr    := $(wildcard @LINUX@/include/trace/events/@BACKFS@*.h)
+backfs_extra   := $(wildcard @LINUX_OBJ@/fs/@BACKFS@/Makefile)
+backfs_exclude := %.mod.c
+backfs_src     := $(filter-out $(backfs_exclude),$(wildcard @LINUX@/fs/@BACKFS@/*.c))
+backfs_hdr     := $(wildcard @LINUX@/fs/@BACKFS@/*.h)
+linux_hdr      := $(wildcard @LINUX@/include/linux/@BACKFS@*.h)
+trace_hdr      := $(wildcard @LINUX@/include/trace/events/@BACKFS@*.h)
 
 ext3_new_src := extents.c mballoc.c group.h dynlocks.c fiemap.h
 ext3_new_hdr := ext3_extents.h
