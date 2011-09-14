@@ -38,6 +38,8 @@ AC_DEFUN([LDISKFS_AC_QUILT], [
 	)
 
 	AC_MSG_RESULT([$enable_quilt])
+
+	AM_CONDITIONAL([USE_QUILT], [test x$enable_quilt != xno])
 ])
 
 AC_DEFUN([LDISKFS_AC_PATH_PROGS], [
@@ -48,8 +50,6 @@ AC_DEFUN([LDISKFS_AC_PATH_PROGS], [
 		AC_MSG_ERROR([
 		*** Quilt or patch are needed to build the ldiskfs module])
 	])
-
-	AM_CONDITIONAL([USE_QUILT], [test x$QUILT != xno])
 ])
 
 AC_DEFUN([LDISKFS_AC_DEFINE_OPTIONS], [
@@ -556,18 +556,38 @@ AC_DEFUN([LDISKFS_AC_RPM], [
 	AC_SUBST(RPMBUILD_VERSION)
 ])
 
-AC_DEFUN([LDISKFS_AC_CONFIG], [
+AC_DEFUN([LDISKFS_AC_CONFIG_KERNEL], [
 	LDISKFS_AC_DIST
 	LDISKFS_AC_KERNEL
 	LDISKFS_AC_CONFIG_HEADERS
 	LDISKFS_AC_LDISKFSDIR
 	LDISKFS_AC_QUILT
-	LDISKFS_AC_PATH_PROGS
 	LDISKFS_AC_DEFINE_OPTIONS
-	LDISKFS_AC_ENABLE_EXT4
 	LDISKFS_AC_EXT_SOURCES
 	LDISKFS_AC_DIST_LDISKFS_SERIES
 	LDISKFS_AC_CHECK_SYMBOL_EXPORTS
 	LDISKFS_AC_MOSTLYCLEANFILES
+])
+
+AC_DEFUN([LDISKFS_AC_CONFIG], [
+	pkgconfig=kernel
+	AC_ARG_WITH([config],
+		[AC_HELP_STRING([--with-config=CONFIG],
+			[Config options 'kernel|srpm'])],
+		[pkgconfig="${withval}"])
+
+	AC_MSG_CHECKING([ldiskfs package config])
+	AC_MSG_RESULT([${pkgconfig}])
+
+	LDISKFS_AC_PATH_PROGS
+	LDISKFS_AC_ENABLE_EXT4
 	LDISKFS_AC_RPM
+
+	AS_CASE([${pkgconfig}],
+		[kernel], [LDISKFS_AC_CONFIG_KERNEL],
+		[srpm],   [],
+		[AC_MSG_ERROR([
+	*** Bad value (${pkgconfig}) given for --with-config
+	*** Please specify either 'kernel|srpm'])]
+	)
 ])
