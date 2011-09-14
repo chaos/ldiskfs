@@ -106,7 +106,9 @@
  %define koppkg          =
  %if %{undefined kdir}
   %if %{defined el6} || %{defined ch5}
-   %define kdir           %{_usrsrc}/kernels/%{kver}
+   %define kobj           %{_usrsrc}/kernels/%{kver}
+   %define kdir           %((echo X; ls -1d %{_usrsrc}/debug/*/linux-%{kver}
+                             2>/dev/null) | tail -1)
   %else
    %define kdir           %{_usrsrc}/kernels/%{kver}-%{_target_cpu}
   %endif
