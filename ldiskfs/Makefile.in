@@ -83,69 +83,74 @@ sed_flags = \
 
 sources: $(backfs_src) $(backfs_hdr) $(linux_hdr) $(trace_hdr) $(series)
 
+	@echo "Removing previous build products"; \
 	rm -rf linux-stage linux sources $(ldiskfs_SOURCES)
 
+	@echo "Creating linux-stage directories"; \
 	mkdir -p linux-stage/fs/@BACKFS@ \
 	         linux-stage/include/linux \
 	         linux-stage/include/trace/events
 
+	@echo "Copying @BACKFS@ files"; \
 	cp $(backfs_src) $(backfs_hdr) $(backfs_extra) \
 	   linux-stage/fs/@BACKFS@
 
+	@echo "Copying linux header files"; \
 	if test -n "$(linux_hdr)"; then \
 		cp $(linux_hdr) linux-stage/include/linux; \
 	fi
 
+	@echo "Copying trace header files"; \
 	if test -n "$(trace_hdr)"; then \
 		cp $(trace_hdr) linux-stage/include/trace/events; \
 	fi
 
 	@echo "Applying @BACKFS@ patches:"
 
-@USE_QUILT_TRUE@	ln -s $(patches) linux-stage/patches
-@USE_QUILT_TRUE@	ln -s $(series)  linux-stage/series
-@USE_QUILT_TRUE@	(cd linux-stage && quilt push -a -q) || exit 1
+@USE_QUILT_TRUE@	@ln -s $(patches) linux-stage/patches
+@USE_QUILT_TRUE@	@ln -s $(series)  linux-stage/series
+@USE_QUILT_TRUE@	@(cd linux-stage && quilt push -a -q) || exit 1
 
-@USE_QUILT_FALSE@	cd linux-stage && for i in $$(< $(series)); do \
-@USE_QUILT_FALSE@		echo $$i; \
-@USE_QUILT_FALSE@		patch -s -p1 < $(patches)/$$i || exit 1; \
+@USE_QUILT_FALSE@	@cd linux-stage && for i in $$(< $(series)); do \
+@USE_QUILT_FALSE@		echo "Applying patch $$i"; \
+@USE_QUILT_FALSE@		patch -p1 < $(patches)/$$i >/dev/null || exit 1; \
 @USE_QUILT_FALSE@	done
 
+	@echo "Creating ldiskfs directories"; \
 	mkdir -p linux trace/events
 
-	@echo "Replacing '@BACKFS@' with 'ldiskfs':"
-
+	@echo "Replacing '@BACKFS@' with 'ldiskfs' in @BACKFS@ files"; \
 	for i in $(notdir $(backfs_hdr) $(backfs_src)) $(new_src); do \
-		echo $$i; \
 		sed $(strip $(sed_flags)) \
 			linux-stage/fs/@BACKFS@/$$i > $$i; \
 	done
 
+	@echo "Renaming @BACKFS@ files to ldiskfs files"; \
 	for i in $(subst @BACKFS@,,$(notdir $(backfs_hdr))); do \
 		old="@BACKFS@$$i"; \
 		new="ldiskfs$$i"; \
 		if test -f $$old; then \
-			echo $$old; \
 			mv $$old $$new; \
 		fi; \
 	done
 
+	@echo "Replacing '@BACKFS@' with 'ldiskfs' in linux header files"; \
 	for i in $(subst @BACKFS@,,$(notdir $(linux_hdr) $(new_hdr))); do \
 		old="@BACKFS@$$i"; \
 		new="ldiskfs$$i"; \
-		echo $$old; \
 		sed $(strip $(sed_flags)) \
 			linux-stage/include/linux/$$old > linux/$$new; \
 	done
 
+	@echo "Replacing '@BACKFS@' with 'ldiskfs' in trace header files"; \
 	for i in $(subst @BACKFS@,,$(notdir $(trace_hdr))); do \
 		old="@BACKFS@$$i"; \
 		new="ldiskfs$$i"; \
-		echo $$old; \
 		sed $(strip $(sed_flags)) \
 			linux-stage/include/trace/events/$$old \
 			> trace/events/$$new; \
 	done
 
+	@echo "Replacing '@BACKFS@' with 'ldiskfs' in dynlocks header files"; \
 	sed $(strip $(sed_flags)) \
 		linux-stage/include/linux/dynlocks.h > linux/dynlocks.h
