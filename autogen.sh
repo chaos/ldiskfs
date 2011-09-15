@@ -1,6 +1,6 @@
 #!/bin/sh
 
-aclocal -I m4
+aclocal -I config
 autoheader
 
 # Only need no-portability if version > 1.10
