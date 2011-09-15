@@ -1,7 +1,7 @@
 SUBDIRS          = ldiskfs
 AUTOMAKE_OPTIONS = foreign
 EXTRA_DIST       = autogen.sh kernel_patches META
-EXTRA_DIST      += lustre-ldiskfs.spec.in am/rpm.am
+EXTRA_DIST      += lustre-ldiskfs.spec.in config/rpm.am
 noinst_HEADERS   = config.h
 
 install-data-local:
@@ -13,4 +13,4 @@ install-data-local:
 		$(INSTALL) -D $$instfile $$instdest/$$instfile; \
 	done
 
-include $(top_srcdir)/am/rpm.am
+include $(top_srcdir)/config/rpm.am
