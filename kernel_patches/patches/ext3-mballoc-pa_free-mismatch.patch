@@ -73,6 +73,26 @@ Index: linux-stage/fs/ext3/mballoc.c
  	atomic_add(free, &sbi->s_mb_discarded);
  
  	return err;
+@@ -4189,6 +4201,19 @@
+ 		*errp = -EDQUOT;
+ 		return 0;
+ 	}
++
++	if (dev_check_rdonly(sb->s_bdev)) {
++		struct block_device *bdev = sb->s_bdev;
++
++		printk(KERN_WARNING "Alloc from readonly device %s (%#x): "
++		       "[inode %lu] [logic %lu] [goal %lu] [ll %lu] [pl %lu] "
++		       "[lr %lu] [pr %lu] [len %lu] [flags %lu]\n",
++		       bdev->bd_disk ? bdev->bd_disk->disk_name : "",
++		       bdev->bd_dev, ar->inode->i_ino, ar->logical, ar->goal,
++		       ar->lleft, ar->pleft, ar->lright, ar->pright, ar->len,
++		       ar->flags);
++	}
++
+ 	inquota = ar->len;
+ 
+ 	ext3_mb_poll_new_transaction(sb, handle);
 @@ -4217,10 +4242,34 @@
  	}
  
@@ -112,3 +132,19 @@ Index: linux-stage/fs/ext3/mballoc.c
  	} else {
  		freed  = ext3_mb_discard_preallocations(sb, ac.ac_o_ex.fe_len);
  		if (freed)
+@@ -4388,6 +4437,15 @@
+ 		goto error_return;
+ 	}
+ 
++	if (dev_check_rdonly(sb->s_bdev)) {
++		struct block_device *bdev = sb->s_bdev;
++
++		printk(KERN_WARNING "Release to readonly device %s (%#x): "
++		       "[inode %lu] [block %lu] [count %lu] [is_meta %d]\n",
++		       bdev->bd_disk ? bdev->bd_disk->disk_name : "",
++		       bdev->bd_dev, inode->i_ino, block, count, metadata);
++	}
++
+ 	ext3_debug("freeing block %lu\n", block);
+ 
+ 	ac.ac_op = EXT3_MB_HISTORY_FREE;
