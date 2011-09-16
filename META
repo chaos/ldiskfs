@@ -1,7 +1,5 @@
-Meta:         1
 Name:         lustre-ldiskfs
-Branch:       1.0
-Version:      3.3.0
+Version:      3.3.2
 Release:      0
 Release-Tags: relext
 License:      GPL

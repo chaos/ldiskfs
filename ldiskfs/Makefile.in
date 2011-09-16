@@ -112,14 +112,12 @@ sources: $(backfs_src) $(backfs_hdr) $(linux_hdr) $(trace_hdr) $(series)
 @USE_QUILT_TRUE@	@(cd linux-stage && quilt push -a -q) || exit 1
 
 @USE_QUILT_FALSE@	@cd linux-stage && for i in $$(< $(series)); do \
-@USE_QUILT_FALSE@		@echo "Applying patch $$i"; \
+@USE_QUILT_FALSE@		echo "Applying patch $$i"; \
 @USE_QUILT_FALSE@		patch -p1 < $(patches)/$$i >/dev/null || exit 1; \
 @USE_QUILT_FALSE@	done
 
 	@echo "Creating ldiskfs directories"; \
 	mkdir -p linux trace/events
-
-	@echo "Replacing '@BACKFS@' with 'ldiskfs':"
 
 	@echo "Replacing '@BACKFS@' with 'ldiskfs' in @BACKFS@ files"; \
 	for i in $(notdir $(backfs_hdr) $(backfs_src)) $(new_src); do \
