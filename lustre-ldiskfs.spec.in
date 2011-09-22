@@ -157,8 +157,24 @@
 # Distro agnostic:
 %define name             @LDISKFS_META_NAME@
 %define version          @LDISKFS_META_VERSION@
-%define release          @LDISKFS_META_RELEASE@
 %define debug_package    %{nil}
+
+# The kernel version should only be appended to a binary RPM.  When
+# building a source RPM it must be kernel version agnostic.  This means
+# the source RPM must never specify a required kernel version, but the
+# final RPM should be keyed to the kernel version it was built against.
+%if %{defined build_src_rpm}
+ %define release          @LDISKFS_META_RELEASE@
+ %if %{defined kpkg}
+  %define krequires        %{kpkg}
+ %endif
+%else
+ %define relext           %(echo %{kverpkg} | %{__sed} -e 's/-/_/g')
+ %define release          @LDISKFS_META_RELEASE@_%{relext}
+ %if %{defined kpkg}
+  %define krequires        %{kpkg} %{koppkg} %{kverpkg}
+ %endif
+%endif
 
 Summary:         ldiskfs File System
 Group:           Utilities/System
