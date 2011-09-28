@@ -1,0 +1,13 @@
+Index: linux-stage/fs/ext4/ext4.h
+===================================================================
+--- linux-stage.orig/fs/ext4/ext4.h
++++ linux-stage/fs/ext4/ext4.h
+@@ -38,6 +38,8 @@
+  * The fourth extended filesystem constants/structures
+  */
+ 
++#define WALK_SPACE_HAS_DATA_SEM 1
++
+ /*
+  * Define EXT4FS_DEBUG to produce debug messages
+  */
