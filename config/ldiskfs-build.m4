@@ -45,13 +45,17 @@ AC_DEFUN([LDISKFS_AC_PATH_PROGS], [
 		[enable_quilt='yes']
 	)
 
-	AS_IF([test x$enable_quilt = xno -o x$QUILT = xno], [
-		AC_MSG_RESULT([no])
-		AM_CONDITIONAL([USE_QUILT], [false])
-	], [
+	dnl # Since AM_CONDITIONAL should not be called conditionally
+	dnl # (i.e. under the AS_IF macro), the test portion of the
+	dnl # below AM_CONDITIONAL and AS_IF macros must be duplicated.
+
+	AS_IF([test x$enable_quilt = xyes -a x$QUILT != xno], [
 		AC_MSG_RESULT([yes])
-		AM_CONDITIONAL([USE_QUILT], [true])
+	], [
+		AC_MSG_RESULT([no])
 	])
+
+	AM_CONDITIONAL([USE_QUILT], [test x$enable_quilt = xyes -a x$QUILT != xno])
 ])
 
 AC_DEFUN([LDISKFS_AC_DEFINE_OPTIONS], [
