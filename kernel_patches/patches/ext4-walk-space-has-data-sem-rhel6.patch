@@ -2,10 +2,17 @@ Index: linux-stage/fs/ext4/ext4.h
 ===================================================================
 --- linux-stage.orig/fs/ext4/ext4.h
 +++ linux-stage/fs/ext4/ext4.h
-@@ -38,6 +38,8 @@
+@@ -38,6 +38,15 @@
   * The fourth extended filesystem constants/structures
   */
  
++/*
++ * In order for Lustre to properly build its ldiskfs lvfs code, Lustre
++ * relies on this macro being set when the ext4_ext_walk_space function
++ * internally downs the i_data_sem semaphore. Thus, this macro is needed
++ * on kernels which exhibit this behavior (i.e. 2.6.32 based kernels or
++ * newer).
++ */
 +#define WALK_SPACE_HAS_DATA_SEM 1
 +
  /*
