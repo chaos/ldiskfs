@@ -45,13 +45,15 @@ AC_DEFUN([LDISKFS_AC_PATH_PROGS], [
 		[enable_quilt='yes']
 	)
 
+	use_quilt=''
 	AS_IF([test x$enable_quilt = xno -o x$QUILT = xno], [
-		AC_MSG_RESULT([no])
-		AM_CONDITIONAL([USE_QUILT], [false])
+		use_quilt='no'
 	], [
-		AC_MSG_RESULT([yes])
-		AM_CONDITIONAL([USE_QUILT], [true])
+		use_quilt='yes'
 	])
+
+	AC_MSG_RESULT([$use_quilt])
+	AM_CONDITIONAL([USE_QUILT], [test x$use_quilt = xyes])
 ])
 
 AC_DEFUN([LDISKFS_AC_DEFINE_OPTIONS], [
