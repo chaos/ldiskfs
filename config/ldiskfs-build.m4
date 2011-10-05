@@ -27,29 +27,33 @@ AC_DEFUN([LDISKFS_AC_LDISKFSDIR], [
 	AC_SUBST(LDISKFSDIR)
 ])
 
-AC_DEFUN([LDISKFS_AC_QUILT], [
-	AC_MSG_CHECKING([whether to enable quilt for making ldiskfs])
-
+AC_DEFUN([LDISKFS_AC_PATCH_PROGRAM], [
 	AC_ARG_ENABLE([quilt],
 		[AC_HELP_STRING([--disable-quilt],
 			[disable use of quilt for ldiskfs])],
-		[],
-		[enable_quilt='yes']
+		[AS_IF([test "x$enableval" = xno],
+                        [use_quilt=no],
+                        [use_quilt=maybe])],
+		[use_quilt=maybe]
 	)
 
-	AC_MSG_RESULT([$enable_quilt])
-])
+        AS_IF([test x$use_quilt = xmaybe], [
+        	AC_PATH_PROG([quilt_avail], [quilt], [no])
+        	AS_IF([test x$quilt_avail = xno], [
+                        use_quilt=no
+        	], [
+                        use_quilt=yes
+        	])
+        ])
 
-AC_DEFUN([LDISKFS_AC_PATH_PROGS], [
-	AC_PATH_PROG([PATCH], [patch], [no])
-	AC_PATH_PROG([QUILT], [quilt], [no])
+        AS_IF([test x$use_quilt = xno], [
+                AC_PATH_PROG([patch_avail], [patch], [no])
+                AS_IF([test x$patch_avail = xno], [
+                        AC_MSG_ERROR([*** Need "quilt" or "patch" command])
+                ])
+        ])
 
-	AS_IF([test x$PATCH$QUILT = xnono], [
-		AC_MSG_ERROR([
-		*** Quilt or patch are needed to build the ldiskfs module])
-	])
-
-	AM_CONDITIONAL([USE_QUILT], [test x$QUILT != xno])
+	AM_CONDITIONAL([USE_QUILT], [test x$use_quilt = xyes])
 ])
 
 AC_DEFUN([LDISKFS_AC_DEFINE_OPTIONS], [
@@ -539,7 +543,6 @@ AC_DEFUN([LDISKFS_AC_CONFIG_KERNEL], [
 	LDISKFS_AC_KERNEL
 	LDISKFS_AC_CONFIG_HEADERS
 	LDISKFS_AC_LDISKFSDIR
-	LDISKFS_AC_QUILT
 	LDISKFS_AC_DEFINE_OPTIONS
 	LDISKFS_AC_EXT_SOURCES
 	LDISKFS_AC_DIST_LDISKFS_SERIES
@@ -557,7 +560,7 @@ AC_DEFUN([LDISKFS_AC_CONFIG], [
 	AC_MSG_CHECKING([ldiskfs package config])
 	AC_MSG_RESULT([${pkgconfig}])
 
-	LDISKFS_AC_PATH_PROGS
+	LDISKFS_AC_PATCH_PROGRAM
 	LDISKFS_AC_ENABLE_EXT4
 	LDISKFS_AC_RPM
 
