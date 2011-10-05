@@ -1,6 +1,6 @@
 Name:         lustre-ldiskfs
 Version:      4.0.0
-Release:      2
+Release:      4
 Release-Tags: relext
 License:      GPL
 Author:       Whamcloud, Sun Microsystems/Oracle, Lawrence Livermore National Laboratory
