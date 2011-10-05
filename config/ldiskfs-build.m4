@@ -32,26 +32,26 @@ AC_DEFUN([LDISKFS_AC_PATCH_PROGRAM], [
 		[AC_HELP_STRING([--disable-quilt],
 			[disable use of quilt for ldiskfs])],
 		[AS_IF([test "x$enableval" = xno],
-                        [use_quilt=no],
-                        [use_quilt=maybe])],
+			[use_quilt=no],
+			[use_quilt=maybe])],
 		[use_quilt=maybe]
 	)
 
-        AS_IF([test x$use_quilt = xmaybe], [
-        	AC_PATH_PROG([quilt_avail], [quilt], [no])
-        	AS_IF([test x$quilt_avail = xno], [
-                        use_quilt=no
-        	], [
-                        use_quilt=yes
-        	])
-        ])
+	AS_IF([test x$use_quilt = xmaybe], [
+		AC_PATH_PROG([quilt_avail], [quilt], [no])
+		AS_IF([test x$quilt_avail = xno], [
+			use_quilt=no
+		], [
+			use_quilt=yes
+		])
+	])
 
-        AS_IF([test x$use_quilt = xno], [
-                AC_PATH_PROG([patch_avail], [patch], [no])
-                AS_IF([test x$patch_avail = xno], [
-                        AC_MSG_ERROR([*** Need "quilt" or "patch" command])
-                ])
-        ])
+	AS_IF([test x$use_quilt = xno], [
+		AC_PATH_PROG([patch_avail], [patch], [no])
+		AS_IF([test x$patch_avail = xno], [
+			AC_MSG_ERROR([*** Need "quilt" or "patch" command])
+		])
+	])
 
 	AM_CONDITIONAL([USE_QUILT], [test x$use_quilt = xyes])
 ])
