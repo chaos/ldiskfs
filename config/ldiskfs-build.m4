@@ -430,6 +430,7 @@ AC_DEFUN([LDISKFS_AC_LDISKFS_SERIES], [
 			])
 		],
 		[2.6.27*], [LDISKFS_SERIES="2.6.22-sles11.series"],
+		[2.6.32-204*], [LDISKFS_SERIES="2.6-rhel6.2.series"],
 		[2.6.32*], [LDISKFS_SERIES="2.6-rhel6.series"],
 		[AC_MSG_RESULT([indeterminate])
 		 AC_MSG_ERROR([*** Unknown kernel version ${LINUX_VERSION}])]
