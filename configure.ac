@@ -11,7 +11,7 @@ LDISKFS_AC_CONFIG
 AC_CONFIG_FILES([
 	Makefile
 	ldiskfs/Makefile
-	lustre-ldiskfs.spec
+	ldiskfs.spec
 ])
 
 AC_OUTPUT
