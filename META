@@ -1,4 +1,4 @@
-Name:         lustre-ldiskfs
+Name:         ldiskfs
 Version:      4.0.4
 Release:      0
 Release-Tags: relext
