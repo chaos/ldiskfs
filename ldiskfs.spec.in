@@ -233,6 +233,18 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root)
 %{_prefix}/src/*
 
+%post devel
+# Make ldiskfs symlink point to this package's source.
+if [ -h %{_prefix}/src/ldiskfs -o ! -e %{_prefix}/src/ldiskfs ]; then
+	ln -snf %{name}-%{version}/%{kver} %{_prefix}/src/ldiskfs
+fi
+
+%postun devel
+# If the ldiskfs symlink is now dangling, remove it.
+if [ -h %{_prefix}/src/ldiskfs -a ! -e %{_prefix}/src/ldiskfs ]; then
+	rm -f %{_prefix}/src/ldiskfs
+fi
+
 %post
 if [ -f /boot/System.map-%{kver} ]; then
 	depmod -ae -F /boot/System.map-%{kver} %{kver} || exit 0
