@@ -422,13 +422,7 @@ AC_DEFUN([LDISKFS_AC_LDISKFS_SERIES], [
 
 	LDISKFS_SERIES=""
 	AS_CASE([${LINUX_VERSION}],
-		[2.6.18*], [
-			AS_IF([test x${enable_ext4} = xyes], [
-				LDISKFS_SERIES="2.6-rhel5-ext4.series"
-			], [
-				LDISKFS_SERIES="2.6-rhel5.series"
-			])
-		],
+		[2.6.18*], [LDISKFS_SERIES="2.6-rhel5-ext4.series"],
 		[2.6.27*], [LDISKFS_SERIES="2.6.22-sles11.series"],
 		[2.6.32-2*rh6*], [LDISKFS_SERIES="2.6-rhel6.2.series"],
 		[2.6.32-2*ch5*], [LDISKFS_SERIES="2.6-rhel6.2.series"],
