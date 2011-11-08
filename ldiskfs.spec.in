@@ -206,6 +206,7 @@ Requires:        %{krequires}
 %if %{defined kdevpkg}
 BuildRequires:   %{kdevpkg}
 %endif
+Obsoletes:       lustre-ldiskfs-devel
 
 %description devel
 The %{name}-devel package contains the kernel header files and
